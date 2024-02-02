@@ -1,0 +1,12 @@
+{
+  "delay": 1,
+  "quiet": true,
+  "verbose": true,
+  "watch": ["src/server", "package.json"],
+  "ignore": "src/routeTree.gen.ts",
+  "execMap": {
+    "ts": "tsx",
+    "tsx": "tsx"
+  },
+  "ext": "js,ts,jsx,tsx,json,md"
+}
