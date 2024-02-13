@@ -7,7 +7,7 @@
     "dev": "dotenv nodemon src/server/app.ts",
     "build": "dotenv vite build",
     "start": "dotenv -v NODE_ENV=production node dist/server/app.js",
-    "lint": "eslint --ext ts,tsx . && tsc",
+    "lint": "dotenv eslint && tsc",
     "format": "prettier \"**/*\" --write --ignore-unknown --cache"
   },
   "dependencies": {
@@ -38,14 +38,13 @@
     "@types/node": "^20.11.17",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",
     "antd": "^5.14.1",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "globals": "^14.0.0",
     "nodemon": "^3.0.3",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
@@ -59,6 +58,7 @@
     "tailwindcss": "^3.4.1",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
+    "typescript-eslint": "^7.0.1",
     "vite": "^5.1.1"
   }
 }
