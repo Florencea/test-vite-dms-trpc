@@ -23,9 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# router
-src/routeTree.gen.ts
-
 # prisma
 /prisma/*
 !/prisma/*.prisma
