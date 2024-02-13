@@ -8,10 +8,10 @@
     "build": "dotenv vite build",
     "start": "dotenv -v NODE_ENV=production node dist/server/app.js",
     "lint": "dotenv eslint && tsc",
-    "format": "prettier \"**/*\" --write --ignore-unknown --cache"
+    "format": "prettier \"**/*\" --write --ignore-unknown --cache",
+    "migrate": "prisma migrate dev --name init"
   },
   "dependencies": {
-    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.9.1",
     "@trpc/server": "^10.45.1",
     "argon2": "^0.31.2",
