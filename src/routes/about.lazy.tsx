@@ -1,6 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { App, Button, DatePicker, Descriptions, Space, Tag } from "antd";
-import { version } from "react";
+import {
+  App,
+  Button,
+  DatePicker,
+  Descriptions,
+  Space,
+  Tag,
+  version,
+} from "antd";
 import { SITE_LOGO } from "../constants";
 
 export const Route = createLazyFileRoute("/about")({
