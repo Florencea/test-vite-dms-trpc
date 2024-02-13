@@ -86,7 +86,7 @@ export const RootLayout = () => {
                 to={import.meta.env.VITE_WEB_BASE}
                 rel="noopener"
               >
-                <img src={SITE_LOGO} alt="logo" />
+                <img className="w-[32px] h-[32px]" src={SITE_LOGO} alt="logo" />
                 <h1 className="font-bold text-lg">
                   {import.meta.env.VITE_TITLE}
                 </h1>

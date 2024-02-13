@@ -6,6 +6,7 @@ import { rollup } from "rollup";
 import esbuild from "rollup-plugin-esbuild";
 import { nodeExternals } from "rollup-plugin-node-externals";
 import { defineConfig, loadEnv, type PluginOption } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 const ServerBuilder = (): PluginOption => {
   return {
@@ -23,7 +24,13 @@ const ServerBuilder = (): PluginOption => {
   };
 };
 
-const { VITE_WEB_BASE, VITE_OUTDIR } = loadEnv("development", cwd(), "");
+const {
+  VITE_WEB_BASE,
+  VITE_OUTDIR,
+  VITE_TITLE,
+  VITE_FAVICON,
+  VITE_THEME_COLOR_PRIMARY,
+} = loadEnv("development", cwd(), "");
 
 export default defineConfig({
   base: VITE_WEB_BASE,
@@ -32,5 +39,29 @@ export default defineConfig({
     chunkSizeWarningLimit: Infinity,
     reportCompressedSize: false,
   },
-  plugins: [react(), TanStackRouterVite(), ServerBuilder()],
+  plugins: [
+    react(),
+    TanStackRouterVite(),
+    VitePWA({
+      registerType: "autoUpdate",
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,jpg,png,svg,avif}"],
+      },
+      manifest: {
+        name: VITE_TITLE,
+        short_name: VITE_TITLE,
+        description: VITE_TITLE,
+        theme_color: VITE_THEME_COLOR_PRIMARY,
+        icons: [
+          {
+            src: VITE_FAVICON,
+            sizes: "512x512",
+            type: "image/png",
+            purpose: ["maskable", "any"],
+          },
+        ],
+      },
+    }),
+    ServerBuilder(),
+  ],
 });

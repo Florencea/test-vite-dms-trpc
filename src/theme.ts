@@ -1,5 +1,4 @@
 import { theme as antTheme, type ThemeConfig } from "antd";
-import tailwindConfig from "../tailwind.config";
 
 const { getDesignToken } = antTheme;
 
@@ -11,7 +10,7 @@ const globalToken = getDesignToken();
 /**
  * 主題色 (自 env 讀取)
  */
-export const PRIMARY_COLOR = tailwindConfig.theme.extend.colors.primary;
+export const PRIMARY_COLOR = import.meta.env.VITE_THEME_COLOR_PRIMARY;
 /**
  * Layout 左側選單寬度
  */
