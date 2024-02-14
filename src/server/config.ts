@@ -61,18 +61,19 @@ const serverUrl = chalk.bold.cyan(
  * Server ready message
  */
 export const SERVER_READY_MESSAGE = `${timestamp} ${plugin} ${message} ${serverUrl}`;
-const secretOrKey = process.env.JWT_SECRET;
-const messageError = chalk.red("No JWT_SECRET found in .env, exit");
-if (!secretOrKey) {
+
+/**
+ * encrypted cookie name
+ */
+export const COOKIE_NAME = "sec";
+
+/**
+ * encrypted cookie secret
+ */
+export const COOKIE_SECRET = process.env.COOKIE_SECRET ?? "";
+
+const messageError = chalk.red("No COOKIE_SECRET found in .env, exit");
+if (!COOKIE_SECRET) {
   console.error(`${timestamp} ${plugin} ${messageError}`);
   exit(1);
 }
-/**
- * JWT settings
- */
-export const JWT_SETTINGS = {
-  secretOrKey,
-  issuer: "localhost",
-  audience: "localhost",
-  maxAge: 3600,
-};

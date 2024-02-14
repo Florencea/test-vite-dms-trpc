@@ -1,6 +1,5 @@
 import { StyleProvider } from "@ant-design/cssinjs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { TRPCClientError, httpLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { App, ConfigProvider, message } from "antd";
@@ -9,44 +8,30 @@ import "dayjs/locale/zh-tw";
 import { StrictMode, useState } from "react";
 import { HeadProvider } from "react-head";
 import "tailwindcss/tailwind.css";
+import type { AppRouter } from "./server/router";
 import { theme } from "./theme";
-
-// Import the generated route tree
-import { routeTree } from "./routeTree.gen";
-import type { AppRouter } from "./server/app";
-
-// Create a new router instance
-export const router = createRouter({ routeTree });
-
-// Register the router instance for type safety
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
 
 export const trpc = createTRPCReact<AppRouter>({ abortOnUnmount: true });
 
 interface Props {
   container: HTMLDivElement;
+  children?: React.ReactNode;
 }
 
-export const Providers = ({ container }: Props) => {
+export const Providers = ({ container, children }: Props) => {
   const [msg, msgContext] = message.useMessage();
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            retry: false,
-            refetchOnWindowFocus: false,
-            retryDelay: (_, err) => {
+            retry: (_, err) => {
               if (err instanceof TRPCClientError) {
-                const content = JSON.parse(err.message)?.[0];
-                msg.error(`${content.code}: ${content.message}`, 4.5);
+                msg.error(`${err.name}: ${err.message}`, 4.5);
               }
-              return 0;
+              return false;
             },
+            refetchOnWindowFocus: false,
           },
         },
       }),
@@ -69,13 +54,14 @@ export const Providers = ({ container }: Props) => {
           >
             <ConfigProvider
               getPopupContainer={() => container}
+              autoInsertSpaceInButton={false}
               locale={zhTW}
               theme={theme}
             >
               <StyleProvider hashPriority="high">
                 <App>
                   {msgContext}
-                  <RouterProvider router={router} />
+                  {children}
                 </App>
               </StyleProvider>
             </ConfigProvider>

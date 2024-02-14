@@ -7,7 +7,7 @@
 
 ## Usage
 
-- Set up `.env` file
+- Set up `.env` file (from `.env.example`).
 - Development: `npm run dev`
 - Build: `npm run build`
 - Prodction: `npm start`

@@ -2,7 +2,7 @@ import { BookOutlined, CameraOutlined } from "@ant-design/icons";
 import { Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { Layout, Menu, theme } from "antd";
 import type { MenuItemType } from "antd/es/menu/hooks/useItems";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Title } from "react-head";
 import { SITE_LOGO } from "../constants";
 import { MENU_WIDTH, NAV_HEIGHT } from "../theme";
@@ -36,12 +36,9 @@ const menuItems: MenuItemType[] = [
   },
 ];
 
-const SiteTitle = ({ children }: { children?: ReactNode }) => {
+const SiteTitle = ({ children }: { children?: string }) => {
   return children ? (
-    <Title>
-      {children}
-      {` - ${import.meta.env.VITE_TITLE}`}
-    </Title>
+    <Title>{`${children} - ${import.meta.env.VITE_TITLE}`}</Title>
   ) : (
     <Title>{import.meta.env.VITE_TITLE}</Title>
   );
@@ -49,9 +46,9 @@ const SiteTitle = ({ children }: { children?: ReactNode }) => {
 
 export const RootLayout = () => {
   const { token } = theme.useToken();
+  const [currentLabel, setCurrentLabel] = useState<string>();
   const pathname = window.location.pathname;
   const navigate = useNavigate();
-  const currentLabel = menuItems.find((item) => item.key === pathname)?.label;
   const disabledKeys = menuItems
     .filter(({ disabled, itemIcon }) => disabled && itemIcon === "")
     .map(({ key }) => key);
@@ -66,6 +63,13 @@ export const RootLayout = () => {
   useEffect(() => {
     if (disabledKeys.includes(pathname)) {
       window.location.replace(import.meta.env.VITE_WEB_BASE);
+    }
+    const c = menuItems
+      .find((item) => item.key === pathname)
+      ?.label?.toString();
+    console.log(c);
+    if (c) {
+      setCurrentLabel(c);
     }
   }, [disabledKeys, pathname]);
 

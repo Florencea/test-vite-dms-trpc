@@ -13,7 +13,7 @@ export const Route = createLazyFileRoute("/")({
 function Index() {
   const queryClient = useQueryClient();
   const [enabled, setEnabled] = useState(false);
-  const { data } = trpc.hello.useQuery("abc", {
+  const { data } = trpc.secret.useQuery("abc", {
     enabled,
   });
   return (
@@ -26,13 +26,14 @@ function Index() {
         />
       </a>
       <h1 className="text-3xl font-bold text-primary">
-        Welcome to {import.meta.env.VITE_TITLE} {data}
+        Welcome to {import.meta.env.VITE_TITLE}
       </h1>
+      <p>{data}</p>
       <Button
         onClick={() => {
           if (enabled) {
             queryClient.invalidateQueries({
-              queryKey: getQueryKey(trpc.hello),
+              queryKey: getQueryKey(trpc.secret),
             });
           } else {
             setEnabled(true);
