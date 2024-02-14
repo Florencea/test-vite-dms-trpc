@@ -29,8 +29,8 @@
   "devDependencies": {
     "@ant-design/cssinjs": "^1.18.4",
     "@ant-design/icons": "^5.3.0",
-    "@tanstack/react-router": "^1.16.0",
-    "@tanstack/router-vite-plugin": "^1.16.1",
+    "@tanstack/react-router": "^1.16.2",
+    "@tanstack/router-vite-plugin": "^1.16.2",
     "@trpc/client": "^10.45.1",
     "@trpc/react-query": "^10.45.1",
     "@types/compression": "^1.7.5",
