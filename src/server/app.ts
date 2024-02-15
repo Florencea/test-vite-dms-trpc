@@ -3,8 +3,10 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import express from "express";
 import helmet from "helmet";
+import i18nMiddleware from "i18next-http-middleware";
 import { cwd } from "node:process";
 import ViteExpress from "vite-express";
+import i18n from "../i18n";
 import {
   API_PREFIX,
   BASE,
@@ -41,6 +43,12 @@ if (IS_PRODCTION) {
     },
   });
 }
+
+/**
+ * i18n
+ */
+i18n.use(i18nMiddleware.LanguageDetector).init(i18n.options);
+app.use(i18nMiddleware.handle(i18n));
 
 /**
  * API controllers

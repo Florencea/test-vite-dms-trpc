@@ -3,8 +3,10 @@ import { getSession } from "../utils/server";
 
 export async function createContext(opts: CreateExpressContextOptions) {
   const session = await getSession(opts);
+  const req = opts.req;
   return {
     session,
+    req,
   };
 }
 

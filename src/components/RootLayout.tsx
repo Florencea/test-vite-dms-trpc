@@ -67,7 +67,6 @@ export const RootLayout = () => {
     const c = menuItems
       .find((item) => item.key === pathname)
       ?.label?.toString();
-    console.log(c);
     if (c) {
       setCurrentLabel(c);
     }
