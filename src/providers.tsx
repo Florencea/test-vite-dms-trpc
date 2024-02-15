@@ -1,17 +1,21 @@
 import { StyleProvider } from "@ant-design/cssinjs";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  QueryClient,
-  QueryClientProvider,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { TRPCClientError, httpBatchLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
+  TRPCClientError,
+  createTRPCProxyClient,
+  httpBatchLink,
+} from "@trpc/client";
+import {
+  createTRPCReact,
+  type inferReactQueryProcedureOptions,
+} from "@trpc/react-query";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { App, ConfigProvider, message } from "antd";
 import type { Locale } from "antd/es/locale";
 import enUS from "antd/es/locale/en_US";
 import zhTW from "antd/es/locale/zh_TW";
 import "dayjs/locale/zh-tw";
-import { StrictMode, useCallback, useEffect, useState } from "react";
+import { StrictMode, useCallback, useMemo, useState } from "react";
 import { HeadProvider } from "react-head";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import "tailwindcss/tailwind.css";
@@ -50,16 +54,12 @@ export const Providers = ({ container, children }: ProviderProps) => {
 
 const AntdProvider = ({ container, children }: ProviderProps) => {
   const { i18n } = useTranslation();
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  }, [i18n.language, queryClient]);
   return (
     <ConfigProvider
       getPopupContainer={() => container}
-      autoInsertSpaceInButton={false}
       locale={antdLocales[i18n.language]}
       theme={theme}
+      autoInsertSpaceInButton={false}
     >
       <StyleProvider hashPriority="high">
         <App>{children}</App>
@@ -69,13 +69,24 @@ const AntdProvider = ({ container, children }: ProviderProps) => {
 };
 
 export const trpc = createTRPCReact<AppRouter>({ abortOnUnmount: true });
+export const trpcVanilla = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: import.meta.env.VITE_API_PREFIX,
+    }),
+  ],
+});
+export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
+export type RouterInputs = inferRouterInputs<AppRouter>;
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 const ApiProvider = ({ children }: Props) => {
   const [msg, msgContext] = message.useMessage();
+  const { i18n } = useTranslation();
   const retry = useCallback(
     (_: number, err: unknown) => {
       if (err instanceof TRPCClientError) {
-        msg.error(`${err.name}: ${err.message}`, 4.5);
+        msg.error(err.message, 4.5);
       }
       return false;
     },
@@ -90,14 +101,19 @@ const ApiProvider = ({ children }: Props) => {
         },
       }),
   );
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      links: [
-        httpBatchLink({
-          url: import.meta.env.VITE_API_PREFIX,
-        }),
-      ],
-    }),
+  const trpcClient = useMemo(
+    () =>
+      trpc.createClient({
+        links: [
+          httpBatchLink({
+            url: import.meta.env.VITE_API_PREFIX,
+            headers: {
+              "Accept-Language": i18n.language,
+            },
+          }),
+        ],
+      }),
+    [i18n.language],
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

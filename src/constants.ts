@@ -1,3 +1,1 @@
-import { getAssetPath } from "./utils/client";
-
-export const SITE_LOGO = getAssetPath(import.meta.env.VITE_FAVICON);
+export const SITE_LOGO = import.meta.env.VITE_FAVICON;

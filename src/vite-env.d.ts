@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resources } from "./i18n";
 
 interface ImportMetaEnv {
   readonly VITE_TITLE: string;
@@ -11,4 +12,10 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+declare module "i18next" {
+  interface CustomTypeOptions {
+    resources: (typeof resources)["en-US"];
+  }
 }

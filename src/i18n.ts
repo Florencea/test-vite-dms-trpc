@@ -12,7 +12,6 @@ export const resources = {
 export const config = {
   resources,
   fallbackLng: "en-US",
-  detection: { caches: ["cookie"] },
   interpolation: {
     escapeValue: false,
   },

@@ -1,13 +1,11 @@
 import { initTRPC } from "@trpc/server";
 import type { Context } from "./context";
-import { hello } from "./procedure/hello";
-import { secret } from "./procedure/secret";
+import { auth } from "./procedure/auth";
 
 const t = initTRPC.context<Context>().create();
 
 export const appRouter = t.router({
-  hello,
-  secret,
+  auth,
 });
 
 export type AppRouter = typeof appRouter;

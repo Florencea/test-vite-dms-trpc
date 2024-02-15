@@ -1,82 +1,57 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { getQueryKey } from "@trpc/react-query";
-import { Button, DatePicker } from "antd";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Button, Card, Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
-import { SITE_LOGO } from "../constants";
-import { trpc } from "../providers";
+import { SiteTitle } from "../components/SiteTitle";
+import { I18nSwitcher } from "../components/i18n-switcher";
+import { trpc, type RouterInputs } from "../providers";
 
-export const Route = createLazyFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute("/")({
+  component: Login,
 });
 
-function Index() {
-  const queryClient = useQueryClient();
-  const [enabled, setEnabled] = useState(false);
-  const [enabled2, setEnabled2] = useState(false);
-  const { data } = trpc.hello.useQuery("abc", {
-    enabled,
-  });
-  const { data: data2 } = trpc.secret.useQuery("abc", {
-    enabled: enabled2,
-  });
-  const { t, i18n } = useTranslation();
+function Login() {
+  const { t } = useTranslation("login");
+  const navigate = useNavigate();
+  const login = trpc.auth.login.useMutation();
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-3 text-center">
-      <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-        <img
-          src={SITE_LOGO}
-          className="pointer-events-none h-[20vmin]"
-          alt={import.meta.env.VITE_TITLE}
-        />
-      </a>
-      <h1 className="text-3xl font-bold text-primary">
-        Welcome to {import.meta.env.VITE_TITLE} {t("hello")}
-      </h1>
-      <p>{data}</p>
-      <p>secret {data2}</p>
-      <Button
-        onClick={() => {
-          if (enabled) {
-            queryClient.invalidateQueries({
-              queryKey: getQueryKey(trpc.hello),
-            });
-          } else {
-            setEnabled(true);
-          }
-        }}
-      >
-        Fetch word public
-      </Button>
-      <Button
-        onClick={() => {
-          if (enabled2) {
-            queryClient.invalidateQueries({
-              queryKey: getQueryKey(trpc.secret),
-            });
-          } else {
-            setEnabled2(true);
-          }
-        }}
-      >
-        Fetch word secret
-      </Button>
-      <Button
-        onClick={() => {
-          i18n.changeLanguage("en-US");
-        }}
-      >
-        to en
-      </Button>
-      <Button
-        onClick={() => {
-          i18n.changeLanguage("zh-TW");
-        }}
-      >
-        to zh
-      </Button>
-      <DatePicker />
-    </div>
+    <>
+      <SiteTitle>{t("login")}</SiteTitle>
+      <main className="w-full h-svh bg-primary flex justify-center items-center">
+        <Card title={t("login")} extra={[<I18nSwitcher key="i18nswicher" />]}>
+          <Form
+            layout="vertical"
+            disabled={login.isLoading}
+            onFinish={async (values: RouterInputs["auth"]["login"]) => {
+              await login.mutateAsync(values);
+              navigate({ to: "/datatable001", replace: true });
+            }}
+          >
+            <Form.Item
+              name="account"
+              label={t("account")}
+              rules={[{ required: true }]}
+            >
+              <Input autoFocus />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              label={t("password")}
+              rules={[{ required: true }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Button
+              loading={login.isLoading}
+              disabled={login.isLoading}
+              block
+              type="primary"
+              htmlType="submit"
+            >
+              {t("submit")}
+            </Button>
+          </Form>
+        </Card>
+      </main>
+    </>
   );
 }
