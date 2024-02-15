@@ -16,7 +16,6 @@ import {
 } from "antd";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { SiteTitle } from "../components/SiteTitle";
 import { I18nSwitcher } from "../components/i18n-switcher";
 import { SITE_LOGO } from "../constants";
 import { trpc, trpcVanilla } from "../providers";
@@ -60,62 +59,59 @@ function Layout() {
     [t],
   );
   return (
-    <>
-      <SiteTitle>dashboard</SiteTitle>
-      <AntdLayout className="h-svh flex flex-col">
-        <Header className="sticky top-0 z-10 flex w-full items-stretch justify-between">
-          <Link
-            className="flex justify-center items-center gap-3"
-            style={{ color: token.colorText }}
-            to={import.meta.env.VITE_WEB_BASE}
-            rel="noopener"
-          >
-            <img className="w-[32px] h-[32px]" src={SITE_LOGO} alt="logo" />
-            <h1 className="font-bold text-lg">{import.meta.env.VITE_TITLE}</h1>
-          </Link>
-          <div className="flex shrink-0 items-center justify-end">
-            <div className="px-3">
-              <Text strong>{info.data?.userName}</Text>
-            </div>
-            <I18nSwitcher />
-            <Button
-              onClick={async () => {
-                await logout.mutateAsync();
-                navigate({ to: "/", replace: true });
-              }}
-              type="text"
-            >
-              {t("logout", { ns: "header" })}
-            </Button>
+    <AntdLayout className="h-svh flex flex-col">
+      <Header className="sticky top-0 z-10 flex w-full items-stretch justify-between">
+        <Link
+          className="flex justify-center items-center gap-3"
+          style={{ color: token.colorText }}
+          to={import.meta.env.VITE_WEB_BASE}
+          rel="noopener"
+        >
+          <img className="w-[32px] h-[32px]" src={SITE_LOGO} alt="logo" />
+          <h1 className="font-bold text-lg">{import.meta.env.VITE_TITLE}</h1>
+        </Link>
+        <div className="flex shrink-0 items-center justify-end">
+          <div className="px-3">
+            <Text strong>{info.data?.userName}</Text>
           </div>
-        </Header>
-        <AntdLayout className="grow flex flex-col">
-          <Sider
-            className="h-svh fixed top-0 left-0 bottom-0"
-            width={MENU_WIDTH}
-            style={{ paddingTop: NAV_HEIGHT }}
+          <I18nSwitcher />
+          <Button
+            onClick={async () => {
+              await logout.mutateAsync();
+              navigate({ to: "/", replace: true });
+            }}
+            type="text"
           >
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={[
-                `/${window.location.pathname.replace(import.meta.env.BASE_URL, "").split("/")?.[1] ?? ""}`,
-              ]}
-              items={menuItems}
-              onClick={({ key }) => {
-                navigate({ to: key });
-              }}
-            />
-          </Sider>
-          <AntdLayout
-            className="w-full grow overflow-hidden"
-            style={{ marginLeft: MENU_WIDTH }}
-          >
-            <Content className="overflow-hidden">
-              <Outlet />
-            </Content>
-          </AntdLayout>
+            {t("logout", { ns: "header" })}
+          </Button>
+        </div>
+      </Header>
+      <AntdLayout className="grow flex flex-col">
+        <Sider
+          className="h-svh fixed top-0 left-0 bottom-0"
+          width={MENU_WIDTH}
+          style={{ paddingTop: NAV_HEIGHT }}
+        >
+          <Menu
+            mode="inline"
+            defaultSelectedKeys={[
+              `/${window.location.pathname.replace(import.meta.env.BASE_URL, "").split("/")?.[1] ?? ""}`,
+            ]}
+            items={menuItems}
+            onClick={({ key }) => {
+              navigate({ to: key });
+            }}
+          />
+        </Sider>
+        <AntdLayout
+          className="w-full grow overflow-hidden"
+          style={{ marginLeft: MENU_WIDTH }}
+        >
+          <Content className="overflow-hidden">
+            <Outlet />
+          </Content>
         </AntdLayout>
       </AntdLayout>
-    </>
+    </AntdLayout>
   );
 }
