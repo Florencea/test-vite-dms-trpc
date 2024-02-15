@@ -1,6 +1,6 @@
 import { StyleProvider } from "@ant-design/cssinjs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TRPCClientError, httpLink } from "@trpc/client";
+import { TRPCClientError, httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { App, ConfigProvider, message } from "antd";
 import zhTW from "antd/es/locale/zh_TW";
@@ -39,7 +39,7 @@ export const Providers = ({ container, children }: Props) => {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
-        httpLink({
+        httpBatchLink({
           url: import.meta.env.VITE_API_PREFIX,
         }),
       ],
