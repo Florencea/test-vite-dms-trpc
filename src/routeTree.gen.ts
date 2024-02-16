@@ -18,12 +18,8 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
-const LayoutDatatable002IndexLazyImport = createFileRoute(
-  '/_layout/datatable002/',
-)()
-const LayoutDatatable001IndexLazyImport = createFileRoute(
-  '/_layout/datatable001/',
-)()
+const LayoutDatatable002LazyImport = createFileRoute('/_layout/datatable002')()
+const LayoutDatatable001LazyImport = createFileRoute('/_layout/datatable001')()
 
 // Create/Update Routes
 
@@ -37,21 +33,19 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const LayoutDatatable002IndexLazyRoute =
-  LayoutDatatable002IndexLazyImport.update({
-    path: '/datatable002/',
-    getParentRoute: () => LayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_layout/datatable002/index.lazy').then((d) => d.Route),
-  )
+const LayoutDatatable002LazyRoute = LayoutDatatable002LazyImport.update({
+  path: '/datatable002',
+  getParentRoute: () => LayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_layout/datatable002.lazy').then((d) => d.Route),
+)
 
-const LayoutDatatable001IndexLazyRoute =
-  LayoutDatatable001IndexLazyImport.update({
-    path: '/datatable001/',
-    getParentRoute: () => LayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_layout/datatable001/index.lazy').then((d) => d.Route),
-  )
+const LayoutDatatable001LazyRoute = LayoutDatatable001LazyImport.update({
+  path: '/datatable001',
+  getParentRoute: () => LayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_layout/datatable001.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -65,12 +59,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/datatable001/': {
-      preLoaderRoute: typeof LayoutDatatable001IndexLazyImport
+    '/_layout/datatable001': {
+      preLoaderRoute: typeof LayoutDatatable001LazyImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/datatable002/': {
-      preLoaderRoute: typeof LayoutDatatable002IndexLazyImport
+    '/_layout/datatable002': {
+      preLoaderRoute: typeof LayoutDatatable002LazyImport
       parentRoute: typeof LayoutImport
     }
   }
@@ -81,8 +75,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   LayoutRoute.addChildren([
-    LayoutDatatable001IndexLazyRoute,
-    LayoutDatatable002IndexLazyRoute,
+    LayoutDatatable001LazyRoute,
+    LayoutDatatable002LazyRoute,
   ]),
 ])
 

@@ -1,9 +1,11 @@
 import { GlobalOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button, Dropdown, type MenuProps } from "antd";
 import { useTranslation } from "react-i18next";
 
 export const I18nSwitcher = () => {
   const { t, i18n } = useTranslation("i18nswicher");
+  const queryClient = useQueryClient();
 
   const items: MenuProps["items"] = [
     {
@@ -24,6 +26,7 @@ export const I18nSwitcher = () => {
         items,
         onClick: ({ key }) => {
           i18n.changeLanguage(key);
+          queryClient.invalidateQueries();
         },
       }}
       trigger={["click"]}
