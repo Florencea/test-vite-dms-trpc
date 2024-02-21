@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { SiteTitle } from "../components/SiteTitle";
 import { I18nSwitcher } from "../components/i18n-switcher";
 import { trpc, type RouterInputs } from "../providers";
+import { useAntdForm } from "../utils/client";
 
 export const Route = createFileRoute("/")({
   component: Login,
@@ -12,40 +13,47 @@ export const Route = createFileRoute("/")({
 function Login() {
   const { t } = useTranslation("login");
   const navigate = useNavigate();
-  const login = trpc.auth.login.useMutation();
+  const { mutateAsync, isLoading } = trpc.auth.login.useMutation();
+  const loginForm = useAntdForm<RouterInputs["auth"]["login"]>({
+    formProps: {
+      layout: "vertical",
+      disabled: isLoading,
+      onFinish: async (values) => {
+        await mutateAsync(values);
+        navigate({ to: "/datatable001", replace: true });
+      },
+    },
+    formItemProps: {
+      account: {
+        name: "account",
+        label: t("account"),
+        rules: [{ required: true }],
+      },
+      password: {
+        name: "password",
+        label: t("password"),
+        rules: [{ required: true }],
+      },
+    },
+  });
   return (
     <>
       <SiteTitle>{t("login")}</SiteTitle>
       <main className="w-full h-svh bg-primary flex justify-center items-center">
         <Card title={t("login")} extra={[<I18nSwitcher key="i18nswicher" />]}>
-          <Form
-            layout="vertical"
-            disabled={login.isLoading}
-            onFinish={async (values: RouterInputs["auth"]["login"]) => {
-              await login.mutateAsync(values);
-              navigate({ to: "/datatable001", replace: true });
-            }}
-          >
-            <Form.Item
-              name="account"
-              label={t("account")}
-              rules={[{ required: true }]}
-            >
+          <Form {...loginForm.formProps}>
+            <Form.Item {...loginForm.formItemProps.account}>
               <Input autoFocus />
             </Form.Item>
-            <Form.Item
-              name="password"
-              label={t("password")}
-              rules={[{ required: true }]}
-            >
+            <Form.Item {...loginForm.formItemProps.password}>
               <Input.Password />
             </Form.Item>
             <Button
-              loading={login.isLoading}
-              disabled={login.isLoading}
-              block
+              loading={isLoading}
+              disabled={isLoading}
               type="primary"
               htmlType="submit"
+              block
             >
               {t("submit")}
             </Button>
