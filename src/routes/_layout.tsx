@@ -5,8 +5,8 @@ import { trpcVanilla } from "../providers";
 export const Route = createFileRoute("/_layout")({
   component: Page,
   beforeLoad: async () => {
-    const isLogin = await trpcVanilla.auth.beacon.mutate();
-    if (!isLogin) {
+    const { success } = await trpcVanilla.auth.info.query();
+    if (!success) {
       throw redirect({
         to: "/",
         replace: true,

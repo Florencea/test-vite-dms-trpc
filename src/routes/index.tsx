@@ -3,8 +3,8 @@ import { trpcVanilla } from "../providers";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
-    const isLogin = await trpcVanilla.auth.beacon.mutate();
-    if (isLogin) {
+    const { success } = await trpcVanilla.auth.info.query();
+    if (success) {
       throw redirect({
         to: "/datatable001",
         replace: true,

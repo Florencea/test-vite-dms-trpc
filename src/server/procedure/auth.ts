@@ -48,29 +48,25 @@ const logout = authorizedProcedure
     return;
   });
 
-const beacon = publicProcedure
-  .input(z.void())
-  .output(z.boolean())
-  .mutation((opts) => {
-    return !!opts.ctx.session.id;
-  });
-
-const info = authorizedProcedure
+const info = publicProcedure
   .input(z.void())
   .output(
     z
       .object({
+        success: z.boolean(),
         userName: z.string(),
       })
       .required(),
   )
   .query(async (opts) => {
-    return { userName: opts.ctx.session.name ?? "" };
+    return {
+      success: !!opts.ctx.session.id,
+      userName: opts.ctx.session.name ?? "",
+    };
   });
 
 export const auth = initTRPC.context<Context>().create().router({
   login,
   logout,
-  beacon,
   info,
 });

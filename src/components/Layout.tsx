@@ -24,6 +24,7 @@ const { Text } = Typography;
 
 export const Layout = ({ children }: Props) => {
   const logout = trpc.auth.logout.useMutation();
+  const info = trpc.auth.info.useQuery();
   const { t } = useTranslation("header");
   const { token } = antdTheme.useToken();
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ export const Layout = ({ children }: Props) => {
       layout="mix"
       actionsRender={() => {
         return [
-          <Text key="userName">xxx</Text>,
+          <Text key="userName">{info.data?.userName}</Text>,
           <I18nSwitcher key="i18nswitcher" />,
         ];
       }}
