@@ -36,7 +36,7 @@
     "@tanstack/react-router": "^1.19.4",
     "@tanstack/router-vite-plugin": "^1.19.6",
     "@trpc/client": "^10.45.2",
-    "@trpc/react-query": "^10.45.1",
+    "@trpc/react-query": "^10.45.2",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
