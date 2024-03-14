@@ -1,4 +1,4 @@
-# Vite DMS tRPC
+# Test Vite DMS tRPC
 
 - A fullstack project
 - Frontend: vite + antd + tailwindCSS + @tanstack/react-router + @tanstack/react-query
