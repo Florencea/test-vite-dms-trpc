@@ -33,7 +33,7 @@
     "@ant-design/cssinjs": "^1.18.4",
     "@ant-design/icons": "^5.3.3",
     "@ant-design/pro-components": "^2.6.50",
-    "@tanstack/react-router": "^1.20.0",
+    "@tanstack/react-router": "^1.20.1",
     "@tanstack/router-vite-plugin": "^1.20.0",
     "@trpc/client": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
