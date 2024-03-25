@@ -19,7 +19,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "dotenv-cli": "^7.4.1",
-    "express": "^4.19.1",
+    "express": "^4.19.2",
     "helmet": "^7.1.0",
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.0",
